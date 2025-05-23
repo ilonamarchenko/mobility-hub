@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0 rounded-4 p-4">
+        <div class="card-body text-center">
+          <h2 class="mb-4">👤 My Profile</h2>
+
+          {% if profile.profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture"
+                 class="rounded-circle shadow-sm mb-4" style="width: 120px; height: 120px; object-fit: cover;">
+          {% else %}
+            <div class="text-muted mb-4 fst-italic">No profile picture uploaded</div>
+          {% endif %}
+
+          <ul class="list-group list-group-flush text-start mb-4">
+            <li class="list-group-item"><strong>First Name:</strong> {{ profile.first_name }}</li>
+            <li class="list-group-item"><strong>Last Name:</strong> {{ profile.last_name }}</li>
+            <li class="list-group-item"><strong>Home University:</strong> {{ profile.home_university }}</li>
+            <li class="list-group-item"><strong>Mobility University:</strong> {{ profile.mobility_university }}</li>
+            <li class="list-group-item"><strong>Biography:</strong> {{ profile.biography|default:"No biography provided." }}</li>
+          </ul>
+
+          <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary mt-3">
+            ✏️ Edit Profile
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center mt-5">
+  <h1 class="mb-4">Welcome, {{ user.first_name|default:user.username }} 👋</h1>
+
+  <p class="lead">
+    Welcome to <strong>Mobility Hub</strong> — your go-to platform for everything about academic mobility! 🌍
+  </p>
+  <p>
+    Here you can share your experience, find advice on housing and studies abroad, and connect with others.
+  </p>
+
+  <p class="mt-4">
+    ➤ Start by updating your <a href="{% url 'profile' %}" class="btn btn-outline-primary">Profile</a><br>
+    ➤ Then, explore or create posts under <a href="{% url 'post_list' %}" class="btn btn-outline-success mt-2">All Posts</a>
+  </p>
+
+  <form method="post" action="{% url 'logout' %}" class="mt-4">
+    {% csrf_token %}
+    <button class="btn btn-danger">Log out</button>
+  </form>
+</div>
+{% endblock %}

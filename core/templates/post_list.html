@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">📚 Students' posts</h2>
+        <a href="{% url 'create_post' %}" class="btn btn-primary">
+            ➕ Create Post
+        </a>
+    </div>
+
+    <!-- Форма фільтрації -->
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <input type="text" name="university" class="form-control" placeholder="University"
+                   value="{{ request.GET.university }}">
+        </div>
+        <div class="col-md-2">
+            <input type="text" name="country" class="form-control" placeholder="Country"
+                   value="{{ request.GET.country }}">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="program" class="form-control" placeholder="Exchange Program"
+                   value="{{ request.GET.program }}">
+        </div>
+        <div class="col-md-2">
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                <option value="academic" {% if request.GET.category == "academic" %}selected{% endif %}>Academic</option>
+                <option value="housing" {% if request.GET.category == "housing" %}selected{% endif %}>Housing</option>
+                <option value="culture" {% if request.GET.category == "culture" %}selected{% endif %}>Culture</option>
+                <option value="custom" {% if request.GET.category == "custom" %}selected{% endif %}>Other</option>
+            </select>
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-outline-primary">🔍 Filter</button>
+        </div>
+    </form>
+
+    <!-- Список постів -->
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card border rounded-4 shadow-lg p-2 h-100" style="border-color: #e0e0e0;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+
+                    {% if post.hashtag_choice == 'academic' %}
+                        <span class="badge px-3 py-2 rounded-pill fs-6" style="background-color:#d0e6ff; color:#004b91;">#Academic Advice</span>
+                    {% elif post.hashtag_choice == 'housing' %}
+                        <span class="badge px-3 py-2 rounded-pill fs-6" style="background-color:#d2f8d2; color:#1c5c1c;">#Housing</span>
+                    {% elif post.hashtag_choice == 'culture' %}
+                        <span class="badge px-3 py-2 rounded-pill fs-6" style="background-color:#fff3cd; color:#856404;">#Cultural Experience</span>
+                    {% elif post.hashtag_choice == 'custom' %}
+                        <span class="badge px-3 py-2 rounded-pill fs-6" style="background-color:#f0f0f0; color:#333;">#{{ post.custom_hashtag|default:"Other" }}</span>
+                    {% endif %}
+
+                    <p class="card-text mt-3">{{ post.content|truncatechars:120 }}</p>
+                    <p class="text-muted small mb-1">🌍 {{ post.university }}, {{ post.country }} – {{ post.exchange_program }}</p>
+                    <p class="text-muted small">🕓 {{ post.created_at|date:"d M Y H:i" }}</p>
+
+                    <a href="{% url 'edit_post' post.id %}" class="btn btn-sm btn-outline-primary">✏️ Edit</a>
+                    <a href="{% url 'delete_post' post.id %}" class="btn btn-sm btn-outline-danger">🗑 Delete</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No posts yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
